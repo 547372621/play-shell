@@ -1,0 +1,51 @@
+
+	awk格式化输出之printf总结：
+	
+		格式符
+			%s		打印字符串
+			%d		打印10进制数
+			%f		打印浮点数
+			%x		打印16进制数
+			%o		打印8进制数
+			%e		打印数字的科学计数法格式
+			%c		打印单个字符的ASCII码
+			
+		修饰符
+			-		左对齐
+			+		右对齐
+			#		显示8进制在前面加0，显示16进制在前面加0x
+			
+			
+		格式符示例：
+			1、以字符串格式打印/etc/passwd中的第7个字段，以":"作为分隔符
+			
+				awk 'BEGIN{FS=":"} {printf "%s",$7}' /etc/passwd
+			
+			2、以10进制格式打印/etc/passwd中的第3个字段，以":"作为分隔符
+			
+				awk 'BEGIN{FS=":"} {printf "%d\n",$3}' /etc/passwd
+			
+			3、以浮点数格式打印/etc/passwd中的第3个字段，以":"作为分隔符
+			
+				awk 'BEGIN{FS=":"} {printf "%0.3f\n",$3}' /etc/passwd
+			
+			4、以16进制数格式打印/etc/passwd中的第3个字段，以":"作为分隔符
+			
+				awk 'BEGIN{FS=":"} {printf "%#x\n",$3}' /etc/passwd
+			
+			5、以8进制数格式打印/etc/passwd中的第3个字段，以":"作为分隔符
+			
+				awk 'BEGIN{FS=":"} {printf "%#o\n",$3}' /etc/passwd
+			
+			6、以科学计数法格式打印/etc/passwd中的第3个字段，以":"作为分隔符
+			
+				awk 'BEGIN{FS=":"} {printf "%e\n",$3}' /etc/passwd
+			
+		修饰符示例：
+			
+			1、左对齐格式
+			2、右对齐格式
+			3、打印8进制或16进制数字是在前面加#
+			
+			
+		
