@@ -1,0 +1,25 @@
+
+	mysql命令参数详解：
+	
+		-u	用户名
+		-p	用户密码
+		-h	服务器IP地址
+		-D	连接的数据库
+		-N	不输出列信息
+		-B	使用tab键代替默认交互分隔符
+		-e	执行SQL语句
+		
+		其他选项
+		-E	垂直输出
+		-H	以HTML格式输出
+		-X	以XML格式输出
+		
+		1、写一个脚本，该脚本可以接收二个参数，参数为需要执行的SQL语句
+		
+			sh operate_mysql.sh "SELECT * FROM student"
+			
+			mysql -udbuser -p123456 -h192.168.184.132 -D school -N -X -B -e "SELECT * FROM student;"
+		
+		2、查询MySQL任意表的数据，并将查询到的结果保存到HTML文件中
+		
+		3、查询MySQL任意表的数据，并将查询到的结果保存到XML文件中
