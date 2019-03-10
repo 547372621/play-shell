@@ -1,0 +1,17 @@
+
+	总结：
+	
+		内置变量：
+			$0					打印行所有信息
+			$1~$n				打印行的第1到n个字段的信息
+			NF	Number Field				处理行的字段个数
+			NR	Number Row					处理行的行号
+			FNR	File Number Row				多文件处理时，每个文件单独记录行号
+			FS	Field Separator				字段分割符，不指定时默认以空格或tab键分割
+			RS	Row Separator				行分隔符，不指定时以回车分割\n
+			OFS	 Output Filed Separator		输出字段分隔符。
+			ORS	 Output Row Separator		输出行分隔符
+			FILENAME			处理文件的文件名
+			ARGC				命令行参数个数
+			ARGV				命令行参数数组
+			
