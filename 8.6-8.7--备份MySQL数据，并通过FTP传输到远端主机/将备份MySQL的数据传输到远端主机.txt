@@ -1,0 +1,20 @@
+
+
+	备份MySQL中的库或表
+	
+		mysqldump
+			常用参数详解：
+			-u		用户名
+			-p		密码
+			-h		服务器IP地址
+			-d		等价于--no-data		只导出表结构
+			-t		等价于--no-create-info	只导出数据，不导出建表语句
+			-A		等价于--all-databases
+			-B		等价于--databases	导出一个或多个数据库
+		
+		需求：将school中的score表备份，并且将备份数据通过FTP传输到192.168.184.3的/data/backup目录下
+		
+			FTP常用指令：
+			
+				open		与FTP服务器建立连接，例子：open 192.168.184.3
+				user		有权限登录FTP服务器的用户名和密码，例子：user ftp_user redhat
