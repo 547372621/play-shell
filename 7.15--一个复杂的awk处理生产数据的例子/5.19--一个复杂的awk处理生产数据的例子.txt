@@ -1,0 +1,145 @@
+
+需求描述：利用awk处理日志，并生成结果报告。
+
+	生成数据脚本insert.sh,内容如下：
+			
+	#!/bin/bash
+	#
+	
+	function create_random()
+	{
+		min=$1
+		max=$(($2-$min+1))
+		num=$(date +%s%N)
+		echo $(($num%$max+$min))
+	}
+	
+	INDEX=1
+	
+	while true
+	do
+		for user in Allen Mike Jerry Tracy Hanmeimei Lilei
+		do
+			COUNT=$RANDOM
+			NUM1=`create_random 1 $COUNT`
+			NUM2=`expr $COUNT - $NUM1`		
+			echo "`date '+%Y-%m-%d %H:%M:%S'` $INDEX Batches:$user INSERT $COUNT DATA INTO database.table 'test',Insert $NUM1 Records Successfully,Failed Insert $NUM2 Records" >> /root/db.log.`date +%Y%m%d`
+			INDEX=`expr $INDEX + 1`
+		done
+	done
+	
+	数据格式如下：
+	2019-01-29 00:58:30 1 Batches: user allen insert 22498 records into database:product table:detail, insert 20771 records successfully,failed 1727 records
+	2019-01-29 00:58:30 2 Batches: user mike insert 29378 records into database:product table:detail, insert 21426 records successfully,failed 7952 records
+	2019-01-29 00:58:30 3 Batches: user jerry insert 22779 records into database:product table:detail, insert 9397 records successfully,failed 13382 records
+	2019-01-29 00:58:30 4 Batches: user tracy insert 25232 records into database:product table:detail, insert 21255 records successfully,failed 3977 records
+				
+	(1)、统计每个人员分别插入了多少条record进数据库
+	
+		输出结果：
+			USER	Total_Records
+			allen	493082
+			mike	349287
+			
+		代码：
+			BEGIN {
+				printf "%-10s%-20s\n","User","Total Records"
+			}
+			
+			{
+				USER[$6]+=$8
+			}
+			
+			END {
+				for(u in USER)
+					printf "%-10s%-20d\n", u,USER[u]
+			}
+				
+					
+	(2)、统计每个人分别插入成功了多少record，失败了多少record
+			
+		输出结果:
+		User 	Sucess_Record		Failed_Records
+		jerry	3472738				283737
+		mike	2738237				28373
+		
+		代码：
+		BEGIN {
+			printf "%-10s%-20s%-20s\n","User","Sucess_Records","Failed_Records"
+		}
+		
+		{
+		
+			SUCCESS[$6]+=$14
+			FAIL[$6]+=$17
+		}
+		
+		END {
+			for(u in SUCCESS)
+				printf "%-10s%-20d%-20d\n",u,SUCCESS[u],FAIL[u]
+		}
+					
+	(3)、将例子1和例子2结合起来，一起输出，输出每个人分别插入多少数据，多少成功，多少失败，并且要格式化输出，加上标题
+	
+		输出结果：
+		User      Total               Sucess              Failed              
+		tracy     7472277             3945659             3526618             
+		allen     7390330             3597157             3793173             
+		mike      7226579             3679395             3547184
+		
+		代码：
+		BEGIN {
+			printf "%-10s%-20s%-20s%-20s\n","User","Total","Sucess","Failed"
+		}
+		
+		{
+			TOTAL[$6]+=$8
+			SUCCESS[$6]+=$14
+			FAIL[$6]+=$17
+		}
+		
+		END {
+			for(u in SUCCESS)
+				printf "%-10s%-20d%-20d%-20d\n",u,TOTAL[u],SUCCESS[u],FAIL[u]
+		}
+					
+	(4)、在例子3的基础上，加上结尾，统计全部插入记录数，成功记录数，失败记录数
+	
+		输出结果：
+		User      Total               Sucess              Failed              
+		tracy     7472277             3945659             3526618             
+		allen     7390330             3597157             3793173             
+		mike      7226579             3679395             3547184
+				  21384945			
+				  
+		代码：
+			BEGIN {
+				printf "%-10s%-20s%-20s%-20s\n","User","Total","Sucess","Failed"
+			}
+			
+			{
+				TOTAL[$6]+=$8
+				SUCCESS[$6]+=$14
+				FAIL[$6]+=$17
+			}
+			
+			END {
+				for(u in SUCCESS)
+				{
+					total+=TOTAL[u]
+					success+=SUCCESS[u]
+					fail+=FAIL[u]
+					printf "%-10s%-20d%-20d%-20d\n",u,TOTAL[u],SUCCESS[u],FAIL[u]
+				}
+			
+				printf "%-10s%-20d%-20d%-20d\n","",total,success,fail
+			}
+				
+	(5)、查找丢失数据的现象，也就是成功+失败的记录数，不等于一共插入的记录数。找出这些数据并显示行号和对应行的日志信息
+	
+		输出结果：
+		
+		代码：
+		awk '{if($8!=$14+$17) print NR,$0}' db.log.201901
+			
+				
