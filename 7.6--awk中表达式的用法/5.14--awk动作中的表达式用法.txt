@@ -1,0 +1,31 @@
+
+awk动作中的表达式用法总结：
+
+	算数运算符
+		+				加
+		-				减
+		*				乘
+		/				除
+		%				取模
+		^或**			乘方
+		++x				在返回x变量之前，x变量加1
+		x++				在返回x变量之后，x变量加1
+		--x				在返回x变量之前，x变量减1
+		x--				在返回x变量之后，x变量减1
+		
+	1、使用awk计算/etc/services中的空白行数量
+		awk '/^$/{sum++}END{print sum}' /etc/services
+	2、计算学生课程分数平均值，学生课程文件内容如下：
+	
+		Allen	80	90	96	98
+		Mike	93	98	92	91
+		Zhang	78	76	87	92
+		Jerry	86	89	68	92
+		Han		85	95	75	90
+		Li		78	88	98	100
+		
+		awk 'BEGIN{printf "%-8s%-8s%-8s%-8s%-8s%s\n","Name","Yuwen","Math","English","Pysical","Average"}{total=$2+$3+$4+$5;AVG=total/4;printf "%-8s%-8d%-8d%-8d%-8d%0.2f\n",$1,$2,3,$4,$5,AVG}' student.txt
+		
+	
+	3、使用awk输出/etc/passwd文件的行数。分两种方式显示行数，一种是正序如1.2.3.4...，另一种是倒序如...5.4.3.2.1
+	
